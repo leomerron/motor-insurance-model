@@ -92,16 +92,49 @@ Population density displays a strong approximately increasing relationship with 
 Vehicle brand shows some variation in observed claim frequency, ranging from approximately 0.058 to 0.096 claims per exposure-year.The differences are considerably smaller than those observed for factors such as Bonus-Malus and driver age. Vehicle brand may nevertheless contain additional predictive information, which will be assessed in the multivariable model.
 
 ## Frequency Modelling
-The first modelling stage will estimate the expected number of claims for each policy.
-A Poisson Generalised Linear Model will initially be fitted, using the number of claims as the response variable and policy exposure as an offset:
-\beta_0+\beta_1x_{i1}+\cdots+\beta_px_{ip}
-+\log(\text{Exposure}_i)
-]
-where (\lambda_i) represents the expected number of claims for policy (i).
+The first modelling stage estimates the expected number of claims for each policy. A Poisson Generalised Linear Model (GLM) was initially fitted, using the number of claims as the response variable and policy exposure as an offset.
+The model takes the form:
+$$
+N_i \sim \text{Poisson}(\lambda_i)
+$$
 
-The exposure offset ensures that policies observed for different lengths of time are compared appropriately.
-The model will investigate the contribution of policyholder, vehicle and geographical characteristics to expected claim frequency.
-Potential overdispersion will also be assessed. If the variance of the claim counts substantially exceeds the Poisson assumption, alternative count models such as a Negative Binomial GLM will be considered.
+$$
+\log(\lambda_i) =
+\log(\text{Exposure}_i)
++ \beta_0
++ \beta_1x_{i1}
++\cdots+
+\beta_px_{ip}
+$$
+where \(N_i\) represents the number of claims for policy \(i\), and the exposure offset accounts for differences in the amount of time each policy was insured.
+
+The initial Poisson model showed evidence of overdispersion. The Pearson dispersion statistic was approximately **1.82**, indicating that the observed variability in claim counts was substantially greater than assumed by the Poisson model.A Negative Binomial GLM was therefore fitted to allow for additional variation in claim frequency. The Negative Binomial model produced a substantially lower AIC than the Poisson model:
+
+| Model             |           AIC |
+| ----------------- | ------------: |
+| Poisson           |     215,557.6 |
+| Negative Binomial | **214,906.9** |
+
+The Negative Binomial model was therefore selected as the primary frequency model. However, its Pearson dispersion statistic remained approximately **1.78**, indicating that some unexplained heterogeneity remains in the data. Several variables showed strong associations with claim frequency after controlling for the other characteristics in the model. Driver age, vehicle age, vehicle power and Bonus-Malus were statistically significant, while claim frequency also varied across vehicle types and geographical areas. The positive coefficient for Bonus-Malus indicates that higher Bonus-Malus values are associated with higher predicted claim frequency, holding the other model variables constant. These relationships should be interpreted as associations rather than causal effects.
+
+### Frequency Model Validation
+
+Predicted claim counts were obtained from the Negative Binomial model. Because the model includes exposure as an offset, these predictions represent expected claim counts over each policy's observed exposure period. To compare policies according to their underlying annual risk, predicted claim counts were divided by exposure to obtain predicted annual claim frequencies. Policies were then ranked into ten risk deciles according to predicted annual claim frequency. Observed and predicted frequencies were compared within each decile.
+
+| Risk decile | Observed frequency | Predicted frequency |
+| ----------: | -----------------: | ------------------: |
+|           1 |              0.036 |               0.038 |
+|           2 |              0.042 |               0.046 |
+|           3 |              0.050 |               0.051 |
+|           4 |              0.054 |               0.056 |
+|           5 |              0.056 |               0.061 |
+|           6 |              0.070 |               0.067 |
+|           7 |              0.080 |               0.075 |
+|           8 |              0.093 |               0.088 |
+|           9 |              0.118 |               0.113 |
+|          10 |              0.190 |               0.199 |
+
+The model demonstrates good discriminatory ability across the risk deciles, with observed claim frequency increasing substantially from approximately **0.036** claims per policy-year in the lowest-risk decile to **0.190** in the highest-risk decile. Predicted and observed frequencies are also relatively close across the risk groups, indicating reasonable calibration. At the portfolio level, the observed claim frequency was approximately **0.0738**, compared with a modelled frequency of approximately **0.0742**. Further validation will include residual diagnostics and Gini/Lorenz analysis to assess the model's discriminatory power.
 
 ## Severity Modelling
 The second stage will model the size of individual claims using freMTPL2sev.
@@ -121,15 +154,7 @@ E[\text{Claim Severity}]
 This represents the expected annual claims cost before incorporating expenses, risk margins, profit margins or other components of an insurance premium. The project will subsequently investigate how these expected costs vary between different policyholder risk profiles.
 
 ## Model Validation
-Model performance will be assessed using both statistical and actuarial measures.
-Planned validation includes:
-Comparison of predicted and observed claim frequencies
-Calibration across predicted-risk groups
-Assessment of predicted versus observed claim severity
-Comparison of predicted and actual aggregate claims costs
-Analysis of model performance across different risk segments
-Gini/Lorenz analysis to assess discriminatory power
-The aim is not simply to obtain a statistically significant model, but to determine whether the model produces useful and appropriately calibrated risk estimates.
+Model performance is being assessed using both statistical and actuarial measures.For the frequency model, predicted and observed claim frequencies were compared across ten predicted-risk deciles. The model showed good separation between low- and high-risk policies while maintaining reasonably close predicted and observed frequencies across the deciles. Further validation will include residual diagnostics, Gini/Lorenz analysis and analysis of predicted versus observed aggregate claims costs. The severity model will also be assessed separately before frequency and severity predictions are combined.
 
 ## Actuarial Interpretation
 A key objective of the project is to translate statistical results into actuarial conclusions.
