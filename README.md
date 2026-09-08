@@ -1,10 +1,7 @@
 # Motor Insurance Risk Model
 
-## Project Objective
-
-Can policyholder and vehicle characteristics be used to estimate
-expected annual claim costs and construct a risk-based motor
-insurance premium?
+## Project Overview
+This project develops a statistical model for estimating motor insurance claim frequency, claim severity and expected annual claim costs using French motor third-party liability insurance data. I am investigating what policyholder and vehicle characteristics can be used to estimate annual claim costs and then build a risk-based motor insurance premium. I have used pricing techniques such as Generalised Linear Models (GLMs) to investigate how characteristics such as driver age, Bonus-Malus and vehicle age are correlated with insurance claims. I implemented this in R to  focus on statistical modelling and actuarial interpretation.
 
 ## Dataset
 
@@ -22,7 +19,15 @@ The data is divided into two datasets:
 
 The two datasets are linked using `IDpol`.
 
-## Dataset Structure
+## Severity data
+
+freMTPL2sev contains 26,444 individual claims and records:
+Policy identifier (IDpol)
+Claim amount
+The two datasets can be linked using the policy identifier IDpol.
+
+## Data Quality and Initial Exploration 
+The datasets contained no missing values in the variables used for the analysis. Policy exposure varies substantially, ranging from approximately one day to just over two years. This is important when analysing claim frequency because policies with greater exposure have more opportunity to generate claims. The claim count distribution is highly concentrated at zero, with approximately 96% of policies having no claims. Multiple claims are relatively uncommon. Claim severity is strongly right-skewed. The median claim amount is approximately €1,172, compared with a mean of approximately €2,266. While 99% of claims are below approximately €16,451, the 99.9th percentile is approximately €152,223 and the largest claim exceeds €4 million.This heavy-tailed severity distribution means that relatively rare large claims can have a substantial effect on aggregate claims costs.
 
 ### Frequency Dataset
 
@@ -37,6 +42,113 @@ about the policyholder, vehicle, exposure period and number of claims.
 
 Each row represents an individual claim and contains the policy ID
 and the amount of the claim.
+
+## Exploratory Data Analysis
+Claim frequencies were calculated using total claims/ total exposure to account for differences in the amount of time each policy was observed, and also using a 95% confidence interval. 
+
+## Driver Age
+Driver Age showed a strong nonlinear relationship with the observed claim frequency. Drivers aged 18–25 have an observed frequency of approximately 0.148 claims per exposure-year, compared with approximately 0.072 for drivers aged 36–45. Claim frequency then generally decreases through older age groups, although the oldest group shows a small increase. This suggests that driver age should not necessarily be represented by a simple linear effect in a frequency model.
+
+## Vehicle Age
+Vehicle age displays a non-monotonic relationship with claim frequency. Frequency is approximately 0.073–0.074 for vehicles aged 0–5 years, rises to approximately 0.081 for vehicles aged 6–10, and then falls to approximately 0.040 for vehicles aged 21 or more. This indicates that a simple assumption of a linear relationship between vehicle age and claim frequency may be inappropriate.
+
+## Bonus-Malus
+Bonus-Malus shows one of the strongest relationships with observed claim frequency. Frequency increases substantially as the Bonus-Malus coefficient increases:
+
+Bonus-Malus 50: 0.0515
+51–60: 0.0745
+61–70: 0.1176
+71–80: 0.1053
+81–100: 0.1434
+101–150: 0.3458
+151–230: 0.5677
+
+The relationship is broadly increasing and becomes particularly pronounced at higher Bonus-Malus values. However, Bonus-Malus reflects previous claims history and therefore should not be interpreted as a purely independent demographic risk factor.
+
+## Vehicle Power
+Vehicle power shows relatively modest differences in observed claim frequency. Frequency ranges from 0.067 for vehicles with power category 4 to around 0.085 for some of the highest power categories. Compared with factors such as Bonus-Malus, driver age and geographical characteristics, vehicle power appears to be a relatively weak univariate predictor.
+
+## Fuel Type
+Diesel vehicles have an observed claim frequency of approximately 0.079, compared with 0.069 for regular-fuel vehicles. This represents a moderate difference in observed frequency, although the relationship may partly reflect differences in other characteristics associated with vehicle type and policyholder characteristics.
+
+## Geographical Area
+The geographical Area variable shows a strong gradient in observed claim frequency:
+Area A: 0.0543
+Area B: 0.0612
+Area C: 0.0679
+Area D: 0.0837
+Area E: 0.0959
+Area F: 0.0952
+The highest-frequency areas have substantially greater observed claim frequency than the lowest-frequency areas. This suggests that geographical characteristics provide useful information for insurance risk classification.
+
+## Region
+Claim frequency also varies substantially between French regions.Observed frequencies range from approximately 0.0526 in Midi-Pyrénées to 0.0934 in Rhône-Alpes.
+Unlike Area, the regional relationship is not monotonic, with some regions having considerably higher or lower frequencies than others. Because Area, Region and Population Density all contain geographical information, their independent contribution will need to be assessed in the multivariable model.
+
+## Population Density
+Population density displays a strong approximately increasing relationship with claim frequency.Observed frequency increases from approximately 0.0543 for areas with population density below 50 to approximately 0.099 for densities between 5,001 and 10,000.The highest-density category has a slightly lower estimate of approximately 0.095, although its confidence interval overlaps substantially with the 5,001–10,000 category. Overall, the data suggests that higher population density is associated with greater claim frequency, although this should not be interpreted as a causal relationship.
+
+## Vehicle Brand
+Vehicle brand shows some variation in observed claim frequency, ranging from approximately 0.058 to 0.096 claims per exposure-year.The differences are considerably smaller than those observed for factors such as Bonus-Malus and driver age. Vehicle brand may nevertheless contain additional predictive information, which will be assessed in the multivariable model.
+
+## Frequency Modelling
+The first modelling stage will estimate the expected number of claims for each policy.
+A Poisson Generalised Linear Model will initially be fitted, using the number of claims as the response variable and policy exposure as an offset:
+\beta_0+\beta_1x_{i1}+\cdots+\beta_px_{ip}
++\log(\text{Exposure}_i)
+]
+where (\lambda_i) represents the expected number of claims for policy (i).
+
+The exposure offset ensures that policies observed for different lengths of time are compared appropriately.
+The model will investigate the contribution of policyholder, vehicle and geographical characteristics to expected claim frequency.
+Potential overdispersion will also be assessed. If the variance of the claim counts substantially exceeds the Poisson assumption, alternative count models such as a Negative Binomial GLM will be considered.
+
+## Severity Modelling
+The second stage will model the size of individual claims using freMTPL2sev.
+The highly right-skewed claim distribution will be investigated using appropriate severity distributions and transformations.
+The objective is to estimate:
+[
+E[\text{Claim Amount} \mid \text{claim occurs}]
+]
+for different risk profiles.
+
+## Expected Claim Costs
+Frequency and severity estimates will then be combined to estimate the expected annual claims cost:
+E[\text{Claim Frequency}]
+\times
+E[\text{Claim Severity}]
+]
+This represents the expected annual claims cost before incorporating expenses, risk margins, profit margins or other components of an insurance premium. The project will subsequently investigate how these expected costs vary between different policyholder risk profiles.
+
+## Model Validation
+Model performance will be assessed using both statistical and actuarial measures.
+Planned validation includes:
+Comparison of predicted and observed claim frequencies
+Calibration across predicted-risk groups
+Assessment of predicted versus observed claim severity
+Comparison of predicted and actual aggregate claims costs
+Analysis of model performance across different risk segments
+Gini/Lorenz analysis to assess discriminatory power
+The aim is not simply to obtain a statistically significant model, but to determine whether the model produces useful and appropriately calibrated risk estimates.
+
+## Actuarial Interpretation
+A key objective of the project is to translate statistical results into actuarial conclusions.
+The analysis will consider:
+Which characteristics provide the greatest predictive information?
+Whether relationships are linear or nonlinear
+Whether different geographical variables provide overlapping information
+Whether the model adequately captures high-risk policyholders
+Whether predicted premiums are appropriately calibrated
+How uncertainty and extreme claims affect expected costs
+Observed relationships will not automatically be interpreted as causal effects, since policyholder and vehicle characteristics may be correlated.
+
+## Limitations
+Several limitations should be considered. The dataset represents a particular French motor insurance portfolio and may not be representative of the UK motor insurance market. Some variables may contain information that overlaps with other rating factors. In particular, geographical variables such as Area, Region and Population Density may be correlated. Bonus-Malus also reflects previous claims experience, meaning that its strong predictive relationship with claim frequency should be interpreted in the context of its role as a claims-history variable. Finally, the claim severity distribution contains a small number of extremely large claims. These observations can have a disproportionate effect on aggregate claims costs and therefore require careful treatment rather than simply being removed as outliers.
+
+## Conclusion
+The exploratory analysis indicates substantial heterogeneity in motor insurance claim frequency across policyholder, vehicle and geographical characteristics. The strongest observed relationships are associated with Bonus-Malus, driver age, geographical Area and population density, while vehicle power and vehicle brand show comparatively weaker univariate relationships. The next stage of the project will determine whether these relationships remain important after controlling for other characteristics using multivariable statistical models. The final objective is to combine frequency and severity predictions to estimate expected annual claims costs and investigate how these estimates could be translated into a risk-based motor insurance premium.
+
+
 
 ## Variables
 
