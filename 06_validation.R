@@ -11,13 +11,10 @@ library(ggplot2)
 # From 01_data_preparation.R:
 #   freq_test
 #   sev_test
-#
 # From 03_frequency_model.R:
 #   frequency_model_nb_age_bm_interaction
-#
 # From 04_severity_model.R:
 #   severity_model_final
-#
 # Validation is performed on the held-out test data to assess
 # out-of-sample predictive performance.
 
@@ -121,9 +118,7 @@ severity_percentage_difference <-
 
 severity_percentage_difference
 
-# ------------------------------------------------------------
 # 5. Severity calibration by predicted-risk decile
-# ------------------------------------------------------------
 
 sev_test$SeverityDecile <- ntile(
   sev_test$PredictedSeverity,
@@ -384,10 +379,8 @@ freq_test$FittedFrequency <- predict(
 )
 
 # Calculate Pearson residuals for the held-out test data.
-#
 # For a Negative Binomial model:
 # Var(Y) = mu + mu^2 / theta
-#
 # where mu is the predicted claim count and theta is the
 # estimated Negative Binomial dispersion parameter.
 
@@ -472,12 +465,9 @@ sev_test$FittedSeverity <- predict(
 )
 
 # Calculate Gamma deviance residuals for the held-out test data.
-#
 # For a Gamma GLM, the deviance contribution is:
-#
 # D_i = 2 * ((y_i - mu_i) / mu_i -
 #            log(y_i / mu_i))
-#
 # where y_i is the observed severity and mu_i is
 # the predicted severity.
 
