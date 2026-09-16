@@ -74,7 +74,6 @@ pure_premium_quantiles
 #   20% expenses
 #    5% risk margin
 #   10% profit margin
-#
 # These are illustrative assumptions rather than estimates
 # from the dataset.
 
