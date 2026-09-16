@@ -29,7 +29,7 @@ freq_data <- freq_raw[, c(
 
 
 
-# 3. Create claim-level severity dataset
+# 2. Create claim-level severity dataset
 
 
 severity_data <- merge(
@@ -49,7 +49,7 @@ severity_data <- merge(
   by = "IDpol"
 )
 
-# 4. Basic data checks
+# 3. Basic data checks
 
 
 # Dimensions
@@ -76,7 +76,7 @@ summary(severity_data$ClaimAmount)
 str(freq_data)
 str(severity_data)
 
-# 5. Train/test split
+# 4. Train/test split
 
 set.seed(123)
 
