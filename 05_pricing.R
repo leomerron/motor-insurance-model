@@ -5,14 +5,11 @@
 library(dplyr)
 
 # The following objects are created in previous scripts:
-#
 # From 01_data_preparation.R:
 #   freq_test
 #   sev_test
-#
 # From 03_frequency_model.R:
 #   frequency_model_nb_age_bm_interaction
-#
 # From 04_severity_model.R:
 #   severity_model_final
 
