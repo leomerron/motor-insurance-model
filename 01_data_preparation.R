@@ -5,7 +5,6 @@
 # 1. Load raw data
 
 # French Motor Third Party Liability (MTPL) insurance dataset.
-#
 # The raw data is stored locally in MTPL_raw_data.RData.
 # This file is excluded from GitHub via .gitignore because the
 # raw dataset is not distributed with this repository.
