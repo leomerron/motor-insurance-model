@@ -26,11 +26,7 @@ freq_data <- freq_raw[, c(
   "Region"
 )]
 
-
-
-
 # 2. Create claim-level severity dataset
-
 
 severity_data <- merge(
   sev_raw,
@@ -50,7 +46,6 @@ severity_data <- merge(
 )
 
 # 3. Basic data checks
-
 
 # Dimensions
 dim(freq_data)
