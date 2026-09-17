@@ -23,7 +23,6 @@ freq_test$PredictedFrequency <- predict(
 
 summary(freq_test$PredictedFrequency)
 
-
 # 2. Predict severity for all test policies
 
 freq_test$PredictedSeverity <- predict(
