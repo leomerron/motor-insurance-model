@@ -384,7 +384,6 @@ ggplot(area_frequency, aes(x = Area, y = Frequency)) +
   theme_minimal()
 
 
-
 # 7. Correlation between numeric rating factors
 
 numeric_correlations <- cor(
