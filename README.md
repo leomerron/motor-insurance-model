@@ -248,7 +248,9 @@ The interaction produces a further substantial improvement in model fit:
 * Degrees of freedom: **16**
 * Likelihood-ratio test: highly significant
 
-The interaction is therefore retained in the final frequency model.
+The interaction is therefore retained in the final frequency model.#
+
+![Predicted claim frequency by driver age and Bonus-Malus](images/age_bm_frequency_heatmap.png)
 
 ### Age × Bonus-Malus risk surface
 
