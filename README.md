@@ -295,6 +295,7 @@ Predicted-risk deciles are also examined.
 
 The model captures the broad increasing pattern in observed severity, although divergence becomes greater in the upper risk deciles. This reflects the substantial variability associated with large claims.
 
+![Actual vs predicted claim severity by decile](images/severity_actual_vs_predicted.png)
 ---
 
 # 5. Pure Premium and Commercial Pricing
