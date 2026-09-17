@@ -7,15 +7,14 @@ library(splines)
 library(ggplot2)
 
 # The following objects are created in 01_data_preparation.R:
-#   freq_data
-#   freq_train
-#   freq_test
+# freq_data
+# freq_train
+# freq_test
 # Claim frequency is modelled using a count distribution with
 # exposure included as an offset.
 
 
 # 1. Baseline Poisson frequency model
-
 
 poisson_model <- glm(
   ClaimNb ~
