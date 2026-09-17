@@ -151,6 +151,8 @@ Relative to the Bonus-Malus 50 group, the observed frequency ratios are approxim
 | 101–150          |              6.72× |
 | 151–230          |              11.0× |
 
+![Claim frequency by Bonus-Malus score](images/bonus_malus_frequency.png)
+
 The extreme 151–230 group has relatively little exposure, so its observed frequency should be interpreted cautiously.
 
 The relationship is also clearly nonlinear, motivating the use of a nonlinear Bonus-Malus effect in the frequency model.
