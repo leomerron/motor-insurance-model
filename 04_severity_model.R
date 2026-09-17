@@ -2,7 +2,6 @@
 # Motor Insurance Pricing Model
 # 04 - Claim Severity Modelling
 
-
 library(ggplot2)
 library(dplyr)
 library(splines)
@@ -15,7 +14,6 @@ library(splines)
 # Claim severity is modelled conditional on a claim occurring.
 
 # 1. Examine claim severity distribution
-
 
 summary(sev_train$ClaimAmount)
 
@@ -92,7 +90,6 @@ AIC(
 # relative to the baseline model, indicating that claim severity
 # varies nonlinearly with driver age. The spline is therefore
 # retained in the final severity model.
-
 
 # 4. Final Gamma severity model
 
@@ -208,4 +205,4 @@ ggplot(
 # predicted severity is strongest through approximately the first
 # seven deciles, while greater divergence occurs in the upper
 # deciles. This reflects the substantial variability in large
-
+# claims and the difficulty of predicting extreme severities.
