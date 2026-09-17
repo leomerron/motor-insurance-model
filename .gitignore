@@ -1,0 +1,15 @@
+# R workspace and history
+.RData
+.Rhistory
+.Rproj.user/
+
+# Local dataset
+MTPL_raw_data.RData
+
+# Local project files
+motor_insurance_workspace.RData
+motor_insurance_history.Rhistory
+
+# OS files
+.DS_Store
+Thumbs.db
