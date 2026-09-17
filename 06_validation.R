@@ -2,7 +2,6 @@
 # Motor Insurance Pricing Model
 # 06 - Model Validation
 
-
 library(dplyr)
 library(ggplot2)
 
@@ -97,7 +96,6 @@ ggplot(
   ) +
   theme_minimal()
 
-
 # 4. Severity validation
 
 sev_test$PredictedSeverity <- predict(
@@ -135,7 +133,6 @@ severity_decile_validation <- sev_test %>%
 
 severity_decile_validation
 
-
 # 6. Severity calibration plot
 
 ggplot(
@@ -162,9 +159,7 @@ ggplot(
   ) +
   theme_minimal()
 
-
 # 7. Aggregate claims-cost validation
-
 
 # Predicted claims cost over the actual exposure period
 predicted_total_claim_cost <- sum(
@@ -302,7 +297,6 @@ mae_test <- mae_test %>%
     by = "IDpol"
   )
 
-
 # Model predicted claims cost over actual exposure
 mae_test <- mae_test %>%
   mutate(
@@ -323,7 +317,6 @@ model_mae <- mean(
 )
 
 model_mae
-
 
 # 10. Naive baseline MAE
 
@@ -367,7 +360,6 @@ mae_reduction_percent <-
   baseline_mae * 100
 
 mae_reduction_percent
-
 
 # 11. Frequency model residual diagnostics
 
@@ -453,9 +445,7 @@ ggplot(
   ) +
   theme_minimal()
 
-
 # 12. Severity model residual diagnostics
-
 
 # Calculate predicted claim severity for the held-out test data.
 sev_test$FittedSeverity <- predict(
