@@ -350,6 +350,8 @@ This produces illustrative commercial premiums of approximately:
 
 The model therefore produces a differentiated pricing structure rather than assigning the same premium to every policy.
 
+![Mean pure premium by pricing decile](images/pure_premium_by_decile.png)
+
 ---
 
 # 6. Model Validation
